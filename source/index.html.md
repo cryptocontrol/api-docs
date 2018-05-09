@@ -3,96 +3,49 @@ title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
-  - ruby
-  - python
-  - javascript
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+  - <a href='mailto:contact@cryptocontrol.io'>Contact Us for a API Key</a>
 
-includes:
-  - errors
+# includes:
+#   - errors
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+This documentation allows users to access the CryptoControl newsfeed via our API endpoint.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+CryptoControl allows users to use our powerful news engine for professional or commercial use. CryptoControl goes through more than 5,000 articles daily from over 1000+ news sources. We then use a specialized AI to understand context of each article and attribute coins and categories to each article.
 
 # Authentication
 
 > To authorize, use this code:
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl "https://cryptocontrol.io/api/v1/public?ref=API_KEY_HERE"
 ```
 
-```javascript
-const kittn = require('kittn');
+> Make sure to replace `API_KEY_HERE` with your API key.
 
-let api = kittn.authorize('meowmeowmeow');
-```
+CryptoControl uses API keys to allow access users to access our newsfeed. You can register a new CryptoControl API key by simply [contacting us](mailto:contact@cryptocontrol.io). We issue tokens almost instantly.
 
-> Make sure to replace `meowmeowmeow` with your API key.
+CryptoControl expects for the API key to be included in all API requests to the server in a GET query field that looks like the following:
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`https://cryptocontrol.io/endpoint?key=API_KEY_HERE`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>API_KEY_HERE</code> with your personal API key.
 </aside>
 
-# Kittens
+# Endpoints
 
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Get News
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+curl "https://cryptocontrol.io/api/v1/public/news"
 ```
 
 > The above command returns JSON structured like this:
@@ -100,140 +53,221 @@ let kittens = api.kittens.get();
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "publishedAt": "2018-05-09T09:39:37.000Z",
+    "hotness": 70641.80597856482,
+    "activityHotness": 0.1,
+    "primaryCategory": "General",
+    "words": 384,
+    "similarArticles": [],
+    "coins": [
+      {
+        "_id": "59cb59e81c073f09e76f614b",
+        "name": "Bitcoin",
+        "slug": "bitcoin",
+        "tradingSymbol": "btc"
+      },
+      {
+        "_id": "5ac2c404a8134644d0cc0a32",
+        "name": "Consensus",
+        "slug": "consensus",
+        "tradingSymbol": "sen"
+      }
+    ],
+    "_id": "5af2c28c11f336001472caff",
+    "description": "Tom Lee, managing partner at Fundstrat Global, said that the annual cryptocurrency conference – that will take place the next week – could see Bitcoin price",
+    "title": "Fundstrat’s Tom Lee Says that Bitcoin Could Skyrocket More than 70% in the Next Week",
+    "url": "https://cryptocontrol.io/r/api/article/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459",
+    "thumbnail": "https://cryptocontrol.io/r/thumbnail/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459"
   },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
+  ...
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves the top news articles.
+
+Articles are sorted by hotness which represents how popular an article is. If you'd like to have articles sorted by date published, then set the latest key in the query parameter.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://cryptocontrol.io/api/v1/public/news`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+latest | false | If set to true, the result will sort articles by "published at" date.
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
 
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+## Get News by Category
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+curl "https://cryptocontrol.io/api/v1/public/news/category"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "analysis": [
+      {
+      "publishedAt": "2018-05-09T09:39:37.000Z",
+      "hotness": 70641.80597856482,
+      "activityHotness": 0.1,
+      "primaryCategory": "General",
+      "words": 384,
+      "similarArticles": [],
+      "coins": [
+        {
+          "_id": "59cb59e81c073f09e76f614b",
+          "name": "Bitcoin",
+          "slug": "bitcoin",
+          "tradingSymbol": "btc"
+        },
+        {
+          "_id": "5ac2c404a8134644d0cc0a32",
+          "name": "Consensus",
+          "slug": "consensus",
+          "tradingSymbol": "sen"
+        }
+      ],
+      "_id": "5af2c28c11f336001472caff",
+      "description": "Tom Lee, managing partner at Fundstrat Global, said that the annual cryptocurrency conference – that will take place the next week – could see Bitcoin price",
+      "title": "Fundstrat’s Tom Lee Says that Bitcoin Could Skyrocket More than 70% in the Next Week",
+      "url": "https://cryptocontrol.io/r/api/article/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459",
+      "thumbnail": "https://cryptocontrol.io/r/thumbnail/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459"
+    },
+    ...
+  ],
+  "blockchain": [...],
+  "exchanges": [...],
+  "general": [...],
+  "government": [...],
+  "ico": [...],
+  "mining": [...]
 }
 ```
 
-This endpoint retrieves a specific kitten.
+This endpoint retrieves the news articles categorized by category.
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+CryptoControl's AI understands articles and groups them into 7 categories (`Analysis`, `Blockchain`, `Exchanges`, `General`, `Government`, `ICO`, `Mining`).
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://cryptocontrol.io/api/v1/public/news/category`
 
-### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
 
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
+## Get News for a Coin
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+curl "https://cryptocontrol.io/api/v1/public/news/category"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "analysis": [
+      {
+      "publishedAt": "2018-05-09T09:39:37.000Z",
+      "hotness": 70641.80597856482,
+      "activityHotness": 0.1,
+      "primaryCategory": "General",
+      "words": 384,
+      "similarArticles": [],
+      "coins": [
+        {
+          "_id": "59cb59e81c073f09e76f614b",
+          "name": "Bitcoin",
+          "slug": "bitcoin",
+          "tradingSymbol": "btc"
+        },
+        {
+          "_id": "5ac2c404a8134644d0cc0a32",
+          "name": "Consensus",
+          "slug": "consensus",
+          "tradingSymbol": "sen"
+        }
+      ],
+      "_id": "5af2c28c11f336001472caff",
+      "description": "Tom Lee, managing partner at Fundstrat Global, said that the annual cryptocurrency conference – that will take place the next week – could see Bitcoin price",
+      "title": "Fundstrat’s Tom Lee Says that Bitcoin Could Skyrocket More than 70% in the Next Week",
+      "url": "https://cryptocontrol.io/r/api/article/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459",
+      "thumbnail": "https://cryptocontrol.io/r/thumbnail/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459"
+    },
+    ...
+  ],
+  "blockchain": [...],
+  "exchanges": [...],
+  "general": [...],
+  "government": [...],
+  "ico": [...],
+  "mining": [...]
 }
 ```
 
-This endpoint deletes a specific kitten.
+This endpoint retrieves the news articles categorized by category.
+
+CryptoControl's AI understands articles and groups them into 7 categories (`Analysis`, `Blockchain`, `Exchanges`, `General`, `Government`, `ICO`, `Mining`).
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`GET https://cryptocontrol.io/api/v1/public/news/category`
 
-### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+## Get News for a Coin by Category
 
+```shell
+curl "https://cryptocontrol.io/api/v1/public/news/category"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "analysis": [
+      {
+      "publishedAt": "2018-05-09T09:39:37.000Z",
+      "hotness": 70641.80597856482,
+      "activityHotness": 0.1,
+      "primaryCategory": "General",
+      "words": 384,
+      "similarArticles": [],
+      "coins": [
+        {
+          "_id": "59cb59e81c073f09e76f614b",
+          "name": "Bitcoin",
+          "slug": "bitcoin",
+          "tradingSymbol": "btc"
+        },
+        {
+          "_id": "5ac2c404a8134644d0cc0a32",
+          "name": "Consensus",
+          "slug": "consensus",
+          "tradingSymbol": "sen"
+        }
+      ],
+      "_id": "5af2c28c11f336001472caff",
+      "description": "Tom Lee, managing partner at Fundstrat Global, said that the annual cryptocurrency conference – that will take place the next week – could see Bitcoin price",
+      "title": "Fundstrat’s Tom Lee Says that Bitcoin Could Skyrocket More than 70% in the Next Week",
+      "url": "https://cryptocontrol.io/r/api/article/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459",
+      "thumbnail": "https://cryptocontrol.io/r/thumbnail/5af2c28c11f336001472caff?ref=5ac11440ec0af7be35528459"
+    },
+    ...
+  ],
+  "blockchain": [...],
+  "exchanges": [...],
+  "general": [...],
+  "government": [...],
+  "ico": [...],
+  "mining": [...]
+}
+```
+
+This endpoint retrieves the news articles categorized by category.
+
+CryptoControl's AI understands articles and groups them into 7 categories (`Analysis`, `Blockchain`, `Exchanges`, `General`, `Government`, `ICO`, `Mining`).
+
+### HTTP Request
+
+`GET https://cryptocontrol.io/api/v1/public/news/category`
